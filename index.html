@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js'></script>
+    <style>
+        #dataList {
+            background-color: rgb(255, 255, 255);
+            width: 300px;
+            padding: 10px;
+        }
+        #dataList li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Communicating from an Arduino to Node.js</h1>
+    <ul id="dataList"></ul>
+
+    <script>
+        var socket = io();
+
+        socket.on('data', function(data) {
+            console.log(data);
+            var dataArray = data.split(','); // Split the data string into an array, assuming it's separated by a comma
+            
+            var temperature = parseFloat(dataArray[0]); // Parse the first part as temperature
+            var tds = parseFloat(dataArray[1]); // Parse the second part as TDS
+            var pH = parseFloat(dataArray[2]); // Parse the third part as pH
+
+            // Update the list with the new data
+            document.getElementById('dataList').innerHTML = `
+                <li>Temperature: ${temperature} C</li>
+                <li>TDS: ${tds}</li>
+                <li>pH: ${pH}</li>
+            `;
+        });
+    </script>
+</body>
+</html>
